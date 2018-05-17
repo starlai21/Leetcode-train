@@ -174,3 +174,79 @@ class Solution {
 ```
 
 
+## 6. ZigZag Conversion
+```
+class Solution {
+    public String convert(String s, int numRows) {
+        if (numRows == 1 || numRows >= s.length())
+            return s;
+        StringBuilder [] sb = new StringBuilder[numRows];
+        for (int i = 0; i<numRows; i++)
+            sb[i] = new StringBuilder();
+        int j = 0, k = 1;
+        for (int i = 0; i<s.length(); i++){
+            sb[j].append(s.charAt(i));
+            if (j == 0)
+                k = 1;
+            if (j == numRows - 1)
+                k = -1;
+            j += k;
+        }
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i<numRows; i++)
+            res.append(sb[i]);
+        return res.toString();
+        
+    }
+}
+```
+
+## 7. Reverse Integer
+```
+class Solution {
+    public int reverse(int x) {
+        int reversed = 0;
+        boolean isNegative = x<0;
+        if (isNegative)
+            x = -x;
+        while (x > 0){
+            if (reversed > (Integer.MAX_VALUE - x%10)/10)
+                return 0;
+            reversed = 10*reversed + x%10;
+            x = x/10;
+        }
+        if (isNegative)
+            reversed = -reversed;
+        return reversed;
+
+    }
+}
+```
+
+## 8. String to Integer (atoi)
+```
+class Solution {
+    public int myAtoi(String str) {
+        int res = 0, i = 0;
+        boolean isNegative = false, hasSign = false;
+        while (i<str.length() && str.charAt(i) == ' ')
+            i++;
+        for (; i<str.length(); i++){
+            if (str.charAt(i) == '+' || str.charAt(i) == '-'){
+                if (hasSign)
+                    return isNegative ? -res : res ;
+                hasSign = true;
+                isNegative = str.charAt(i) == '-' ? true : false;
+            } else if (str.charAt(i) >= '0' && str.charAt(i) <= '9'){
+                hasSign = true;
+                if (res > Integer.MAX_VALUE/10 || (res == Integer.MAX_VALUE/10 && str.charAt(i) > '7'))
+                    return isNegative ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+                res = res*10 + str.charAt(i) - '0';
+            } else {
+                break;
+            }
+        }
+        return isNegative ? -res : res ;
+    }
+}
+```
