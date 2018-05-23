@@ -1,6 +1,6 @@
 # Leetcode-train
 
-## 1. Two Sum
+## 1. [Two Sum](https://leetcode.com/problems/two-sum/description/)
 ```
 class Solution {
     public int[] twoSum(int[] nums, int target) {
@@ -12,7 +12,7 @@ class Solution {
         for (int i = 0; i < nums.length; i++){
             Integer a = table.get(target-nums[i]);
             if (a != null && (a != i)){
-                result[0]=i;
+                result[0] = i;
                 result[1] = a;
             }
         }
@@ -21,7 +21,7 @@ class Solution {
 }
 ```
 
-## 2. Add Two Numbers
+## 2. [Add Two Numbers](https://leetcode.com/problems/add-two-numbers/description/)
 ```
 /**
  * Definition for singly-linked list.
@@ -70,7 +70,7 @@ class Solution {
 }
 ```
 
-## 3. Longest Substring Without Repeating Characters
+## 3. [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/description/)
 ```
 class Solution {
     public int lengthOfLongestSubstring(String s) {
@@ -101,7 +101,7 @@ class Solution {
 
 
 
-## 4. Median of Two Sorted Arrays
+## 4. [Median of Two Sorted Arrays](https://leetcode.com/problems/median-of-two-sorted-arrays/description/)
 
 [A great explanation](https://leetcode.com/problems/median-of-two-sorted-arrays/discuss/2481/Share-my-O(log(min(mn))-solution-with-explanation))
 
@@ -155,7 +155,7 @@ class Solution {
 ```
 
 
-## 5. Longest Palindromic Substring
+## 5. [Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/description/)
 ```
 class Solution {
     public String longestPalindrome(String s) {
@@ -174,7 +174,7 @@ class Solution {
 ```
 
 
-## 6. ZigZag Conversion
+## 6. [ZigZag Conversion] (https://leetcode.com/problems/zigzag-conversion/description/)
 ```
 class Solution {
     public String convert(String s, int numRows) {
@@ -201,7 +201,7 @@ class Solution {
 }
 ```
 
-## 7. Reverse Integer
+## 7. [Reverse Integer](https://leetcode.com/problems/reverse-integer/description/)
 ```
 class Solution {
     public int reverse(int x) {
@@ -223,7 +223,7 @@ class Solution {
 }
 ```
 
-## 8. String to Integer (atoi)
+## 8. [String to Integer (atoi)](https://leetcode.com/problems/string-to-integer-atoi/)
 ```
 class Solution {
     public int myAtoi(String str) {
@@ -247,6 +247,128 @@ class Solution {
             }
         }
         return isNegative ? -res : res ;
+    }
+}
+```
+
+## 9. [Palindrome Number](https://leetcode.com/problems/palindrome-number/description/)
+```
+class Solution {
+    public boolean isPalindrome(int x) {
+        if (x<0 || (x%10 == 0 && x != 0))
+            return false;
+        int reversed = 0;
+        while (x > reversed){
+            reversed = 10*reversed + x%10;
+            x /= 10;
+        }
+        return (reversed == x || reversed/10 == x);
+    }
+}
+```
+
+## 10. [Regular Expression Matching](https://leetcode.com/problems/regular-expression-matching/description/)
+
+```
+class Solution {
+    public boolean isMatch(String s, String p) {
+        if (p.isEmpty())
+            return s.isEmpty();
+        int n = s.length()+1;
+        int m = p.length()+1;
+        boolean [][] dp = new boolean [n][m];
+        dp[0][0] = true;
+        for(int i=2; i<m; i++){
+            if(p.charAt(i-1) == '*')
+                dp[0][i] = dp[0][i-2];
+        }
+        for(int i=1; i<n; i++)
+            for(int j=1; j<m; j++){
+                if(p.charAt(j-1) == s.charAt(i-1) || p.charAt(j-1) == '.')
+                    dp[i][j] = dp[i-1][j-1];
+                else if (p.charAt(j-1) == '*'){
+                    if (p.charAt(j-2) == s.charAt(i-1) || p.charAt(j-2) == '.')
+                        dp[i][j] = dp[i][j-2] || dp[i-1][j];
+                    else 
+                        dp[i][j] = dp[i][j-2];
+                }
+            }
+        return dp[n-1][m-1];
+    }
+}
+```
+## 11. [Container With Most Water](https://leetcode.com/problems/container-with-most-water/description/)
+```
+class Solution {
+    public int maxArea(int[] height) {
+        int h = 0, start = 0, end = height.length-1, area = 0;
+        while(start < end){
+            h = Math.min(height[start], height[end]);
+            area = Math.max(h*(end-start), area);
+            while (height[start] <= h && start < end)
+                start++;
+            while (height[end] <= h && start < end)
+                end--;
+        }
+        return area;
+    }
+}
+```
+
+## 12. [Integer to Roman](https://leetcode.com/problems/integer-to-roman/description/)
+```
+class Solution {
+    public String intToRoman(int num) {
+        String [] thousands = {"", "M", "MM", "MMM"};
+        String [] hundreds = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC","DCCC","CM" };
+        String [] tens = {"","X","XX","XXX","XL","L","LX","LXX","LXXX","XC"};
+        String [] ones = {"","I","II","III","IV","V","VI","VII","VIII","IX"};
+        return thousands[num/1000] + hundreds[(num%1000)/100] + tens[(num%100)/10] + ones[num%10];
+    }
+}
+```
+
+## 13. [Roman to Integer](https://leetcode.com/problems/roman-to-integer/description/)
+```
+class Solution {
+    public int romanToInt(String s) {
+        Map<Character, Integer> map = new HashMap<>();
+        map.put('I',1);
+        map.put('V',5);
+        map.put('X',10);
+        map.put('L',50);
+        map.put('C',100);
+        map.put('D',500);
+        map.put('M',1000);
+        int value = 0, 
+            length = s.length(), 
+            i = length-2;
+        value = map.get(s.charAt(length-1));
+        while (i >= 0){
+            if (map.get(s.charAt(i)) >= map.get(s.charAt(i+1)))
+                value += map.get(s.charAt(i));
+            else
+                value -= map.get(s.charAt(i));
+            i--;
+        }
+        return value;
+    }
+}
+
+```
+
+## 14. [Longest Common Prefix](https://leetcode.com/problems/longest-common-prefix/description/)
+```
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        if (strs == null || strs.length == 0)
+            return "";
+        String s = strs[0];
+        for(int i=1; i<strs.length; i++){
+            while(strs[i].indexOf(s) != 0)
+                s = s.substring(0, s.length()-1);
+        }
+        return s;
     }
 }
 ```
